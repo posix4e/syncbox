@@ -15,3 +15,22 @@ impl<F: FnOnce() + Send> Task for F {
         self()
     }
 }
+
+// ToDO unneeded with v1 of rust. This is to get
+// around the fact that FnBox and the like are
+// are unstable
+pub trait TaskBox: Send {
+    fn run_boxes(self: Box<Self>);
+}
+impl Task for Box<TaskBox>{
+    fn run(self) {
+        self.run_boxes();
+    }
+}
+impl<F: FnOnce() + Send > TaskBox for F {
+    fn run_boxes(self: Box<Self>) {
+        self.run()
+    }
+
+}
+
