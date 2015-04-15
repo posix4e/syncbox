@@ -5,12 +5,12 @@ pub trait Run<T: Task> {
 }
 
 /// A value that can run a unit of work.
-pub trait Task : Send +'static {
+pub trait Task : Send {
     /// Run the unit of work
     fn run(self);
 }
 
-impl<F: FnOnce() + Send+ 'static> Task for F {
+impl<F: FnOnce() + Send> Task for F {
     fn run(self) {
         self()
     }
